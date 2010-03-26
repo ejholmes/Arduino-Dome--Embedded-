@@ -14,6 +14,7 @@ class Position {
     long Degrees();
     long stepperPosition;
     long Quickest(long azimuth);
+    void Sync(long azimuth);
   private:
     long PosToDegrees(long pos);
     long DegreesToPos(int degrees);

@@ -93,6 +93,8 @@ void Dome::PrintAzimuth()
 void Dome::Park()
 {
   Slew(parkPosition);
+  delay(500);
+  Serial.println("PARKED");
 }
 
 void Dome::OpenCloseShutter(int open)
@@ -110,5 +112,8 @@ void Dome::OpenCloseShutter(int open)
 
 void Dome::SyncToAzimuth(long azimuth)
 {
+  position.Sync(azimuth);
   PrintAzimuth();
+  delay(500);
+  Serial.println("SYNCED");
 }

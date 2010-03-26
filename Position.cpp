@@ -32,6 +32,11 @@ long Position::Quickest(long azimuth)
   return bounded;
 }
 
+void Position::Sync(long azimuth)
+{
+  this->stepperPosition = this->DegreesToPos(azimuth);
+}
+
 long Position::Stepper()
 {
   return this->stepperPosition;

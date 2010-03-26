@@ -10,6 +10,7 @@
 #include <avr/io.h>
 #include "AFMotor.h"
 #include "Messenger.h"
+#include "Position.h"
 
 class Dome
 {
@@ -27,7 +28,6 @@ class Dome
     long GetPosition(long azimuth);
     void PrintAzimuth();
     long parkPosition;
-    long position;
 };
 
 #endif

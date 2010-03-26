@@ -11,7 +11,7 @@ extern "C" {
 AF_Stepper motor(360 / DEGREES_PER_STEP, 2); // Create our stepper motor. I have mine on port 2 of the motor shield.
 
 long parkPosition = 0;
-long position = 0;
+Position position(FULLROTATION);
 
 //
 // Constructor
@@ -19,6 +19,7 @@ long position = 0;
 Dome::Dome(void)
 {
   motor.setSpeed(100); // Set a default RPM of 10
+  //position = 0;
 }
 
 //
@@ -64,7 +65,7 @@ void Dome::step(long val)
     long counter = abs(val);
     while(counter--)
     {
-      if(Serial.available() > 0 || position == 0)
+      if(Serial.available() > 0)
         break;
       motor.step(1, FORWARD, DOUBLE);
       position--;
@@ -78,9 +79,7 @@ void Dome::AbortSlew()
 
 void Dome::Slew(long azimuth)
 {
-  long move = GetPosition(azimuth) - position;
-  
-  step(move);
+  step(position.Quickest(azimuth));
   
   PrintAzimuth();
 }
@@ -88,7 +87,7 @@ void Dome::Slew(long azimuth)
 void Dome::PrintAzimuth()
 {
   Serial.print("P ");
-  Serial.println(GetAzimuth());
+  Serial.println(position.Degrees());
 }
 
 void Dome::Park()
@@ -111,17 +110,5 @@ void Dome::OpenCloseShutter(int open)
 
 void Dome::SyncToAzimuth(long azimuth)
 {
-  position = GetPosition(azimuth);
-  
   PrintAzimuth();
-}
-
-long Dome::GetAzimuth()
-{
-  return map(position, 0, FULLROTATION, 0, 360);
-}
-
-long Dome::GetPosition(long azimuth)
-{
-  return map(azimuth, 0, 360, 0, FULLROTATION) + 1;
 }

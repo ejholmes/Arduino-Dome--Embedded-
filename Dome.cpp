@@ -51,26 +51,29 @@ void Dome::interpretCommand(Messenger *message)
 
 void Dome::step(long val)
 {
-  long lastAz = 0;
-  if (val > 0) { // If move is positive, move forward
-    while(val--)
-    {
-      if(Serial.available() > 0)
+  int move = abs(val);
+  int moved = 0;
+  bool hithalf = false;
+  int accel = move / 2;
+  
+  while(move--)
+  {
+    if(Serial.available() > 0)
         break;
-      motor.step(1, BACKWARD, DOUBLE);
-      position++;
+    motor.setSpeed(constrain(moved, MINSPEED, MAXSPEED));
+    motor.step(1, (val > 0)?BACKWARD:FORWARD, DOUBLE);
+    (val > 0)?position++:position--;
+    if(!hithalf)
+    {
+      moved++;
+      if(moved >= accel)
+        hithalf = true;
+    }
+    else
+    {
+      moved--;
     }
   }
-  else if (val < 0) { // else if move is negative, move backward
-    long counter = abs(val);
-    while(counter--)
-    {
-      if(Serial.available() > 0)
-        break;
-      motor.step(1, FORWARD, DOUBLE);
-      position--;
-    }
-  } 
 }
 
 void Dome::AbortSlew()

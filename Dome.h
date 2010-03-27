@@ -5,6 +5,8 @@
 #define DEGREES_PER_STEP 1.8
 
 #define FULLROTATION 20000
+#define MINSPEED 10
+#define MAXSPEED 150
 
 #include <inttypes.h>
 #include <avr/io.h>
